@@ -1,4 +1,12 @@
 #!/bin/bash
+# +-------------------------------------------------------------+
+# | this script takes a username or UID as argument and prints	|
+# | all available information about the user to the terminal	|
+# |								|
+# | USAGE:							|
+# | ./userinfo <username or UID>				|
+# +-------------------------------------------------------------+
+
 exec 2>/dev/null # because fuck errors
 
 UNAMES=$(cat /etc/passwd | cut -d ':' -f1)
@@ -9,7 +17,7 @@ UID_FOUND=$( echo "$UIDS" | grep -cim1 -Fx $1)
 
 if [ $UNAME_FOUND == 1 ]; then
 	echo -e "\tfound user, printing details"
-	ID=$(cat /etc/passwd | grep $1 | cut -d ':' -f3)
+	ID=$(getent passwd $1 | cut -d ':' -f3)
 elif [ $UID_FOUND == 1 ]; then
 	echo -e "\tfound user-id, printing details"
 	ID=$1
