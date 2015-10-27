@@ -1,18 +1,28 @@
 #!/bin/bash
+# +-------------------------------------------------------------+
+# | this script looks throught the firefox-cookies and allows	|
+# | searching for certain hosts/host patterns			|
+# |								|
+# | USAGE:							|
+# | ./cookies.sh [host|hostpattern] <host or pattern>		|
+# | EXAMPLE:							|
+# | ./cookies.sh host github.io					|
+# +-------------------------------------------------------------+
 
 USERPROFILE=$(find ~/.mozilla/firefox -name *default)
 
 if [[ $1 == host ]]; then
-	COOKIES=$(sqlite3 $USERPROFILE/cookies.sqlite "select * from moz_cookies where host like '%$2%'")
+	COOKIES=$(sqlite3 $USERPROFILE/cookies.sqlite "select * from moz_cookies where host = '$2'")
 elif [[ $1 == hostpattern ]]; then
-	echo TODO
+	# not entirely sure what hostname patterns are / how they are used... therefore using like
+        COOKIES=$(sqlite3 $USERPROFILE/cookies.sqlite "select * from moz_cookies where host like '%$2%'")
 else
 	echo "first argument not valid!"
 	exit -1
 fi
 
-#looking up .schema of the DB
-#CREATE TABLE moz_cookies (id INTEGER PRIMARY KEY, baseDomain TEXT, appId INTEGER DEFAULT 0, inBrowserElement INTEGER DEFAULT 0, name TEXT, value TEXT, host TEXT, path TEXT, expiry 
+#looked up .schema of the DB
+#CREATE TABLE moz_cookies (id INTEGER PRIMARY KEY, baseDomain TEXT, appId INTEGER DEFAULT 0, inBrowserElement INTEGER DEFAULT 0, name TEXT, value TEXT, host TEXT, path TEXT, expiry
 #INTEGER, lastAccessed INTEGER, creationTime INTEGER, isSecure INTEGER, isHttpOnly INTEGER,  ...
 
 CNT=0
@@ -34,4 +44,3 @@ for COOKIE in $COOKIES; do
 	let CNT++
 done
 echo "number of matching cookies: $CNT"
-
