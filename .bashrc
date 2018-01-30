@@ -2,8 +2,7 @@ alias ll="ls -l"
 alias lo="ls -o"
 alias lh="ls -lh"
 alias la="ls -la"
-alias powersave="sudo cpupower frequency-set -g powersave"
-alias ondemand="sudo cpupower frequency-set -g ondemand"
+alias dog="git log --all --decorate --oneline --graph"
 
 shopt -s histappend
 # Combine multiline commands into one in history
@@ -25,13 +24,21 @@ fuck() { # do sudo, or sudo the last command if no argument given
     fi
 }
 
+ccd() { # create directoy (if not already existing) and change into it
+    if test ! -e "$1";
+        then mkdir -p "$1";
+    fi;
+    command cd "$1";
+}
+
+
 ex () {
    if [ -f $1 ] ; then
        case $1 in
            *.tar.bz2)   tar xvjf $1    ;;
            *.tar.gz)    tar xvzf $1    ;;
            *.bz2)       bunzip2 $1     ;;
-           *.rar)       unrar x $1       ;;
+           *.rar)       unrar x $1     ;;
            *.gz)        gunzip $1      ;;
            *.tar)       tar xvf $1     ;;
            *.tbz2)      tar xvjf $1    ;;
@@ -173,9 +180,7 @@ fi
 # ===== History Configurations =====
 HISTSIZE=10000
 HISTFILESIZE=10000000000
-HISTCONTROL=ignoreboth
 HISTTIMEFORMAT="%D - %T : "
-shopt -s histappend
 shopt -s checkwinsize
 
 home_bin=~/bin
@@ -213,17 +218,6 @@ set -o vi
 
 # Set config variables first
 GIT_PROMPT_ONLY_IN_REPO=1
-
 # GIT_PROMPT_FETCH_REMOTE_STATUS=0   # uncomment to avoid fetching remote status
-
-# GIT_PROMPT_SHOW_UPSTREAM=1 # uncomment to show upstream tracking branch
-
-# GIT_PROMPT_STATUS_COMMAND=gitstatus_pre-1.7.10.sh # uncomment to support Git older than 1.7.10
-
-# GIT_PROMPT_START=...    # uncomment for custom prompt start sequence
-# GIT_PROMPT_END=...      # uncomment for custom prompt end sequence
-
-# as last entry source the gitprompt script
-# GIT_PROMPT_THEME=Custom # use custom .git-prompt-colors.sh
-# GIT_PROMPT_THEME=Solarized # use theme optimized for solarized color scheme
+GIT_PROMPT_SHOW_UPSTREAM=1 # uncomment to show upstream tracking branch
 source ~/git/bash-git-prompt/gitprompt.sh
